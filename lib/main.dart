@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(_title),
-          backgroundColor: Colors.lightBlueAccent,
+          title: new Center(child: new Text(_title, textAlign: TextAlign.center,)),
+          backgroundColor: Colors.grey[700],
         ),
         body: _maskWidget,
       ),
@@ -116,13 +116,13 @@ class _TranslatorState extends State<MyStatefulWidget> {
                     baseText,
                     textAlign: TextAlign.center,
                     style:
-                        TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
                   new Text(
                     translatedText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 22.0, fontWeight: FontWeight.normal),
+                        fontSize: 18.0, fontWeight: FontWeight.normal),
                   ),
                 ],
               ),
@@ -135,20 +135,14 @@ class _TranslatorState extends State<MyStatefulWidget> {
                 alignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.remove_red_eye),
-                    onPressed: () {
-                      unmask();
-                    },
-                  ),
-                  IconButton(
-                    color: Colors.lightBlueAccent,
-                    iconSize: 40,
+                  new RaisedButton(onPressed: unmask, child: IconButton(
+                    icon: Icon(Icons.remove_red_eye
+                    )
+                  ),),
+                  new RaisedButton(color: Colors.green[400], onPressed: nextTranslation, child: IconButton(
+                    color: Colors.black,
                     icon: Icon(Icons.navigate_next),
-                    onPressed: () {
-                      nextTranslation();
-                    },
-                  ),
+                  )),
                 ],
               ),
             ],
