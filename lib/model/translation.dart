@@ -1,0 +1,1 @@
+class Translation {  String baseText;  String translatedText;  Translation(this.baseText, this.translatedText);}
