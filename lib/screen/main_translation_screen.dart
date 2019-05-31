@@ -71,49 +71,38 @@ class _TranslatorState extends State<MainTranslationScreen> {
             ),
           ]),
       bottomNavigationBar: new ButtonBar(
-        alignment: MainAxisAlignment.end,
+        alignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           new Visibility(
             visible: !_endOfGame,
+            replacement: new RaisedButton(
+                color: Colors.blue[400],
+                onPressed: _reset,
+                child: IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.refresh),
+                )),
             child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 new RaisedButton(
-                    color: Colors.red[800],
+                    color: Colors.red,
                     onPressed: _nextTranslationWithFailed,
                     child: IconButton(
-                      color: Colors.black,
-                      icon: Icon(Icons.navigate_next),
-                    )),
-                new RaisedButton(
-                    color: Colors.green[400],
-                    onPressed: _nextTranslationWithSuccess,
-                    child: IconButton(
-                      color: Colors.black,
-                      icon: Icon(Icons.thumb_up),
+                      icon: Icon(Icons.thumb_down),
                     )),
                 new IgnorePointer(
                   ignoring: _watchPressed,
                   child: new RaisedButton(
                     onPressed: _unmask,
-                    color: Colors.blue[400],
+                    color: Colors.grey[300],
                     child: IconButton(icon: Icon(Icons.remove_red_eye)),
                   ),
                 ),
-              ],
-            ),
-          ),
-          new Visibility(
-            visible: _endOfGame,
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
                 new RaisedButton(
-                    color: Colors.blue[400],
-                    onPressed: _reset,
+                    color: Colors.green[400],
+                    onPressed: _nextTranslationWithSuccess,
                     child: IconButton(
-                      color: Colors.black,
-                      icon: Icon(Icons.refresh),
+                      icon: Icon(Icons.thumb_up),
                     )),
               ],
             ),

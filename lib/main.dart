@@ -24,8 +24,9 @@ class MyApp extends StatelessWidget {
               child: new Text(
             _title,
             textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey),
           )),
-          backgroundColor: Colors.grey[700],
+          backgroundColor: Colors.white,
         ),
         body: _maskWidget,
       ),
