@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:watleuk/controller/translation_controller.dart';
+import 'package:watleuk/model/deck.dart';
 import 'package:watleuk/model/translation.dart';
 
 class MainTranslationScreen extends StatefulWidget {
   _TranslatorState _currentAppState;
+
   MainTranslationScreen(TranslationController _translationController, {Key key})
       : super(key: key) {
     _currentAppState = new _TranslatorState(_translationController);
   }
+
   @override
   _TranslatorState createState() => _currentAppState;
 }
@@ -17,20 +20,98 @@ class _TranslatorState extends State<MainTranslationScreen> {
 
   bool _watchPressed = false;
   bool _endOfGame = false;
+  bool _deck0Selected = true;
+
+  int _deckSize1 = 0;
+  TextStyle _textStyleButtonDeck1 = new TextStyle(color: Colors.black);
+  Color _colorButtonDeck1 = Colors.white;
+  int _deckSize2 = 0;
+  TextStyle _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
+  Color _colorButtonDeck2 = Colors.blue[500];
 
   String _baseText = '';
   String _translatedText = '';
+
+  Deck _selectedDeck = Deck.Deck1;
 
   _TranslatorState(TranslationController translationController) {
     _translationController = translationController;
 
     _baseText = translationController.getCurrentTranslation().getBaseText();
+    _deckSize1 = _translationController.getDeckSize(Deck.Deck1);
+    _deckSize2 = _translationController.getDeckSize(Deck.Deck2);
   }
 
   @override
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width * 0.95;
     return new Scaffold(
+      appBar: new AppBar(
+        actions: <Widget>[
+          new Visibility(
+            visible: !_endOfGame,
+            child: new Center(
+              child: new Text(
+                'Deck:',
+              ),
+            ),
+          ),
+          new Visibility(
+            visible: !_endOfGame,
+            child: new Card(
+              color: _colorButtonDeck1,
+              child: new FlatButton(
+                onPressed: _deckSize1 > 0
+                    ? () {
+                        _setSelectedDeck(Deck.Deck1);
+                      }
+                    : null,
+                child: new Center(
+                  child: new Column(
+                    children: <Widget>[
+                      new Text(
+                        'Backlog',
+                        style: _textStyleButtonDeck1,
+                      ),
+                      new Text(
+                        _deckSize1.toString(),
+                        style: _textStyleButtonDeck1,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          new Visibility(
+            visible: !_endOfGame,
+            child: new Card(
+              color: _colorButtonDeck2,
+              child: new FlatButton(
+                onPressed: _deckSize2 > 0
+                    ? () {
+                        _setSelectedDeck(Deck.Deck2);
+                      }
+                    : null,
+                child: new Center(
+                  child: new Column(
+                    children: <Widget>[
+                      new Text(
+                        'Known',
+                        style: _textStyleButtonDeck2,
+                      ),
+                      new Text(
+                        _deckSize2.toString(),
+                        style: _textStyleButtonDeck2,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -112,6 +193,28 @@ class _TranslatorState extends State<MainTranslationScreen> {
     );
   }
 
+  void _setSelectedDeck(Deck selection) {
+    setState(() {
+      if (Deck.Deck1 == selection) {
+        _textStyleButtonDeck1 = new TextStyle(color: Colors.black);
+        _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
+        _colorButtonDeck1 = Colors.white;
+        _colorButtonDeck2 = Colors.blue[500];
+      } else if (Deck.Deck2 == selection) {
+        _textStyleButtonDeck2 = new TextStyle(color: Colors.black);
+        _textStyleButtonDeck1 = new TextStyle(color: Colors.white);
+        _colorButtonDeck2 = Colors.white;
+        _colorButtonDeck1 = Colors.blue[500];
+      } else {
+        _textStyleButtonDeck1 = new TextStyle(color: Colors.white);
+        _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
+        _colorButtonDeck2 = Colors.blue[500];
+        _colorButtonDeck1 = Colors.blue[500];
+      }
+      _selectedDeck = selection;
+    });
+  }
+
   void _unmask() {
     setState(() {
       _watchPressed = true;
@@ -134,6 +237,7 @@ class _TranslatorState extends State<MainTranslationScreen> {
     setState(() {
       _translationController.reset();
       _endOfGame = false;
+      _setSelectedDeck(Deck.Deck1);
       _nextTranslation();
     });
   }
@@ -142,7 +246,7 @@ class _TranslatorState extends State<MainTranslationScreen> {
     setState(() {
       _watchPressed = false;
       final Translation _translation =
-          _translationController.getNextTranslation();
+          _translationController.getNextTranslation(_selectedDeck);
       if (_translation != null) {
         _baseText = _translation.getBaseText();
         _translatedText = '';
@@ -151,6 +255,8 @@ class _TranslatorState extends State<MainTranslationScreen> {
         _translatedText = 'Try again?';
         _endOfGame = true;
       }
+      _deckSize1 = _translationController.getDeckSize(Deck.Deck1);
+      _deckSize2 = _translationController.getDeckSize(Deck.Deck2);
     });
   }
 }
