@@ -36,7 +36,7 @@ class DataSupplyController {
     _translations.add(new Translation("was ", "wat"));
     _translations.add(new Translation("wer ", "wie"));
     _translations.add(new Translation("aber ", "maar"));
-    _translations.add(new Translation("wie schön!", "wat leuk!"));
+    _translations.add(new Translation("wie schon!", "wat leuk!"));
     _translations.add(new Translation("Das stimmt", "Dat klopt"));
     _translations.add(new Translation("Ich spreche ein bisschen Niederländisch",
         "Ik spreek en beetje Nederlands"));
@@ -48,7 +48,7 @@ class DataSupplyController {
     _translations.add(new Translation("viele große Handtücher", "veel grote handdoeken"));
     _translations.add(new Translation("guter Preis/Kauf", "goed koop"));
     _translations.add(new Translation("zentral", "centraal"));
-    _translations.add(new Translation("Sauberes Zimmer", "schöne Kammer"));
+    _translations.add(new Translation("Sauberes Zimmer", "schone Kammer"));
     _translations.add(new Translation("nicht zu teuer", "niet te duur"));
     _translations.add(new Translation("nachts ruhig", "nachts rustig"));
     _translations.add(new Translation("großes gemütliches Bett", "groot comfortabel bed"));
