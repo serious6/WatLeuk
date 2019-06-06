@@ -1,1 +1,1 @@
-enum Deck {  Deck1,  Deck2,}
+enum Deck {  Deck1,  Deck2,  Favourite,}
