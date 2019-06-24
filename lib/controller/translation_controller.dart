@@ -13,7 +13,6 @@ class TranslationController {
   // ProgressQueues;
   final Queue<Translation> _basic = new Queue();
   final Queue<Translation> _expert = new Queue();
-  final Queue<Translation> _favourite = new Queue();
 
   // ------------------------------------------------------------------------
 
@@ -26,7 +25,6 @@ class TranslationController {
 
     _basic.clear();
     _expert.clear();
-    _favourite.clear();
 
     _basic.addAll(_dataSupplyController.buildData());
   }
@@ -92,24 +90,11 @@ class TranslationController {
     }
   }
 
-  void updateFavourite(final Deck _sourceDeck, bool _favourite) {
-    if (_sourceDeck != null) {
-      if (!_favourite) {
-        // unfavourite
-        _moveBetweenDecks(Deck.Favourite, Deck.Deck1);
-      } else {
-        _moveBetweenDecks(_sourceDeck, Deck.Favourite);
-      }
-    }
-  }
-
   Queue<Translation> _getDeckByName(Deck _deck) {
     if (Deck.Deck1 == _deck) {
       return _basic;
     } else if (Deck.Deck2 == _deck) {
       return _expert;
-    } else if (Deck.Favourite == _deck) {
-      return _favourite;
     } else {
       return null;
     }

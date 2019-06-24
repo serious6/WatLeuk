@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:watleuk/controller/translation_controller.dart';
 import 'package:watleuk/model/deck.dart';
 import 'package:watleuk/model/translation.dart';
-import 'package:watleuk/widget/favourite_star.dart';
 
 class MainTranslationScreen extends StatefulWidget {
   _TranslatorState _currentAppState;
@@ -28,11 +27,6 @@ class _TranslatorState extends State<MainTranslationScreen> {
   int _deckSize2 = 0;
   TextStyle _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
   Color _colorButtonDeck2 = Colors.blue[500];
-  int _deckSize3 = 0;
-  TextStyle _textStyleButtonDeck3 = new TextStyle(color: Colors.white);
-  Color _colorButtonDeck3 = Colors.blue[500];
-
-  FavouriteStarIconButton _favouriteStarIconButton;
 
   String _baseText = '';
   String _translatedText = '';
@@ -50,42 +44,9 @@ class _TranslatorState extends State<MainTranslationScreen> {
   @override
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width * 0.95;
-    _favouriteStarIconButton =
-        new FavouriteStarIconButton(onChanged: _favouriteOnUpdate);
+
     return new Scaffold(
       appBar: new AppBar(
-        leading: new Visibility(
-          visible: !_endOfGame,
-          child: new Center(
-            child: new Visibility(
-              visible: !_endOfGame,
-              child: new Card(
-                color: _colorButtonDeck3,
-                child: new FlatButton(
-                  onPressed: _deckSize3 > 0
-                      ? () {
-                          _setSelectedDeck(Deck.Favourite);
-                        }
-                      : null,
-                  child: new Center(
-                    child: new Column(
-                      children: <Widget>[
-                        Icon(
-                          Icons.star,
-                          color: Colors.yellow[400],
-                        ),
-                        new Text(
-                          _deckSize3.toString(),
-                          style: _textStyleButtonDeck3,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
         actions: <Widget>[
           new Visibility(
             visible: !_endOfGame,
@@ -152,54 +113,34 @@ class _TranslatorState extends State<MainTranslationScreen> {
           ),
         ],
       ),
-      body: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Visibility(
-              visible: _endOfGame,
-              child:
-                  new Image.asset("graphics/crown.png", fit: BoxFit.scaleDown),
-            ),
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    new Container(
-                        width: _width,
-                        child: new Center(
-                          child: new Row(
-                            children: <Widget>[
-                              new Text(
-                                _baseText,
-                                style: TextStyle(
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              new Visibility(
-                                visible: !_endOfGame,
-                                child: _favouriteStarIconButton,
-                              )
-                            ],
-                          ),
-                        )),
-                    new Container(
-                      width: _width,
-                      child: new Text(
-                        _translatedText,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                  ],
+      body: new Row(
+        children: <Widget>[
+          new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Container(
+                width: _width,
+                child: new Text(
+                  _baseText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
-          ]),
+              ),
+              new Container(
+                width: _width,
+                child: new Text(
+                  _translatedText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
       bottomNavigationBar: new ButtonBar(
         alignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -247,24 +188,13 @@ class _TranslatorState extends State<MainTranslationScreen> {
       if (Deck.Deck1 == selection) {
         _textStyleButtonDeck1 = new TextStyle(color: Colors.black);
         _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
-        _textStyleButtonDeck3 = new TextStyle(color: Colors.white);
         _colorButtonDeck1 = Colors.white;
         _colorButtonDeck2 = Colors.blue[500];
-        _colorButtonDeck3 = Colors.blue[500];
       } else if (Deck.Deck2 == selection) {
         _textStyleButtonDeck2 = new TextStyle(color: Colors.black);
         _textStyleButtonDeck1 = new TextStyle(color: Colors.white);
-        _textStyleButtonDeck3 = new TextStyle(color: Colors.white);
         _colorButtonDeck2 = Colors.white;
         _colorButtonDeck1 = Colors.blue[500];
-        _colorButtonDeck3 = Colors.blue[500];
-      } else if (Deck.Favourite == selection) {
-        _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
-        _textStyleButtonDeck1 = new TextStyle(color: Colors.white);
-        _textStyleButtonDeck3 = new TextStyle(color: Colors.black);
-        _colorButtonDeck2 = Colors.blue[500];
-        _colorButtonDeck1 = Colors.blue[500];
-        _colorButtonDeck3 = Colors.white;
       }
       _selectedDeck = selection;
     });
@@ -310,26 +240,8 @@ class _TranslatorState extends State<MainTranslationScreen> {
         _translatedText = 'Try again?';
         _endOfGame = true;
       }
-      resetFavouriteButton();
       _deckSize1 = _translationController.getDeckSize(Deck.Deck1);
       _deckSize2 = _translationController.getDeckSize(Deck.Deck2);
-      _deckSize3 = _translationController.getDeckSize(Deck.Favourite);
-    });
-  }
-
-  void resetFavouriteButton() {
-    setState(() {
-      _favouriteStarIconButton =
-          new FavouriteStarIconButton(onChanged: _favouriteOnUpdate);
-    });
-  }
-
-  void _favouriteOnUpdate(bool _activeState) {
-    setState(() {
-      _translationController.updateFavourite(_selectedDeck, _activeState);
-      _deckSize1 = _translationController.getDeckSize(Deck.Deck1);
-      _deckSize2 = _translationController.getDeckSize(Deck.Deck2);
-      _deckSize3 = _translationController.getDeckSize(Deck.Favourite);
     });
   }
 }
