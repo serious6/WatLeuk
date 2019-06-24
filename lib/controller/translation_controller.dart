@@ -22,13 +22,14 @@ class TranslationController {
 
   void reset() {
     _progressTracker.setCurrentTranslation(null);
+
     _basic.clear();
     _expert.clear();
 
     _basic.addAll(_dataSupplyController.buildData());
   }
 
-  Translation getNextTranslation(Deck selectedDeck) {
+  Translation getNextTranslation(final Deck selectedDeck) {
     Translation _next = _pickRandomTranslation(selectedDeck);
     if (_next != null) {
       _progressTracker.setCurrentTranslation(_next);
@@ -36,16 +37,15 @@ class TranslationController {
     return _next;
   }
 
-  Translation _pickRandomTranslation(Deck selectedDeck) {
-    final Queue<Translation> _selectedQueue =
-        (Deck.Deck1 == selectedDeck ? _basic : _expert);
+  Translation _pickRandomTranslation(final Deck selectedDeck) {
+    Queue<Translation> _currentQueue = _getDeckByName(selectedDeck);
 
-    if (_selectedQueue.isEmpty) {
+    if (_currentQueue.length < 1) {
       return null;
     }
 
     final Translation _translation =
-        (_selectedQueue.toList(growable: false)..shuffle()).first;
+        (_currentQueue.toList(growable: false)..shuffle()).first;
 
     return _translation;
   }
@@ -61,34 +61,42 @@ class TranslationController {
   void reportFailedTranslation() {
     _progressTracker.reportFailedTranslation();
 
-    final Translation _current = _progressTracker.getCurrentTranslation();
-    if (_expert.contains(_current)) {
-      _expert.remove(_current);
-      _basic.add(_current);
-    }
+    _moveBetweenDecks(Deck.Deck2, Deck.Deck1);
   }
 
   void reportSuccessfulTranslation() {
     _progressTracker.reportSuccessfulTranslation();
 
-    final Translation _current = _progressTracker.getCurrentTranslation();
-    if (_basic.contains(_current)) {
-      _basic.remove(_current);
-      _expert.add(_current);
-    }
+    _moveBetweenDecks(Deck.Deck1, Deck.Deck2);
   }
 
   int getDeckSize(final Deck deck) {
-    if (Deck.Deck1 == deck) {
-      if (_basic != null) {
-        return _basic.toList(growable: false).length;
-      }
-    } else if (Deck.Deck2 == deck) {
-      if (_basic != null) {
-        return _expert.toList(growable: false).length;
-      }
+    final Queue<Translation> _currentDeck = _getDeckByName(deck);
+    if (_currentDeck != null) {
+      return _currentDeck.toList(growable: false).length;
     } else {
       return -1;
+    }
+  }
+
+  void _moveBetweenDecks(final Deck _source, final Deck _target) {
+    final Translation _current = getCurrentTranslation();
+    final Queue<Translation> _sourceDeck = _getDeckByName(_source);
+    final Queue<Translation> _targetDeck = _getDeckByName(_target);
+
+    if (_sourceDeck.contains(_current)) {
+      _sourceDeck.remove(_current);
+      _targetDeck.add(_current);
+    }
+  }
+
+  Queue<Translation> _getDeckByName(Deck _deck) {
+    if (Deck.Deck1 == _deck) {
+      return _basic;
+    } else if (Deck.Deck2 == _deck) {
+      return _expert;
+    } else {
+      return null;
     }
   }
 }

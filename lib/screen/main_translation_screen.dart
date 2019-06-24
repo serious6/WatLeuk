@@ -20,7 +20,6 @@ class _TranslatorState extends State<MainTranslationScreen> {
 
   bool _watchPressed = false;
   bool _endOfGame = false;
-  bool _deck0Selected = true;
 
   int _deckSize1 = 0;
   TextStyle _textStyleButtonDeck1 = new TextStyle(color: Colors.black);
@@ -45,6 +44,7 @@ class _TranslatorState extends State<MainTranslationScreen> {
   @override
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width * 0.95;
+
     return new Scaffold(
       appBar: new AppBar(
         actions: <Widget>[
@@ -59,6 +59,7 @@ class _TranslatorState extends State<MainTranslationScreen> {
           new Visibility(
             visible: !_endOfGame,
             child: new Card(
+              borderOnForeground: true,
               color: _colorButtonDeck1,
               child: new FlatButton(
                 onPressed: _deckSize1 > 0
@@ -112,45 +113,34 @@ class _TranslatorState extends State<MainTranslationScreen> {
           ),
         ],
       ),
-      body: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Visibility(
-              visible: _endOfGame,
-              child:
-                  new Image.asset("graphics/crown.png", fit: BoxFit.scaleDown),
-            ),
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    new Container(
-                      width: _width,
-                      child: new Text(
-                        _baseText,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 22.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    new Container(
-                      width: _width,
-                      child: new Text(
-                        _translatedText,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                  ],
+      body: new Row(
+        children: <Widget>[
+          new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Container(
+                width: _width,
+                child: new Text(
+                  _baseText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
-          ]),
+              ),
+              new Container(
+                width: _width,
+                child: new Text(
+                  _translatedText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
       bottomNavigationBar: new ButtonBar(
         alignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -204,11 +194,6 @@ class _TranslatorState extends State<MainTranslationScreen> {
         _textStyleButtonDeck2 = new TextStyle(color: Colors.black);
         _textStyleButtonDeck1 = new TextStyle(color: Colors.white);
         _colorButtonDeck2 = Colors.white;
-        _colorButtonDeck1 = Colors.blue[500];
-      } else {
-        _textStyleButtonDeck1 = new TextStyle(color: Colors.white);
-        _textStyleButtonDeck2 = new TextStyle(color: Colors.white);
-        _colorButtonDeck2 = Colors.blue[500];
         _colorButtonDeck1 = Colors.blue[500];
       }
       _selectedDeck = selection;
